@@ -28,17 +28,17 @@ addEventListener("storage", (event) => {
 
     const line = document.createElementNS(ns, "line");
     line.setAttribute("data-id", w.id);
-    line.setAttribute("x1", w.position.x);
-    line.setAttribute("y1", w.position.y);
-    line.setAttribute("x2", w.position.x);
-    line.setAttribute("y2", w.position.y);
+    line.setAttribute("x1", w.position.x - window.screenLeft);
+    line.setAttribute("y1", w.position.y - window.screenTop);
+    line.setAttribute("x2", w.position.x - window.screenLeft);
+    line.setAttribute("y2", w.position.y - window.screenTop);
     line.setAttribute("stroke", "var(--foreground)");
     lineGroup.appendChild(line);
 
     const circle = document.createElementNS(ns, "circle");
     circle.setAttribute("data-id", w.id);
-    circle.setAttribute("cx", w.position.x);
-    circle.setAttribute("cy", w.position.y);
+    circle.setAttribute("cx", w.position.x - window.screenLeft);
+    circle.setAttribute("cy", w.position.y - window.screenTop);
     circle.setAttribute("r", 50);
     circle.setAttribute("fill", w.color);
     circleGroup.appendChild(circle);
@@ -60,14 +60,18 @@ function render() {
   svg.setAttribute("height", window.innerHeight);
 
   gsap.to(`[data-id="${currentWindow.id}"]`, {
-    cx: currentWindow.position.x - window.screenLeft,
-    cy: currentWindow.position.y - window.screenTop,
+    attr: {
+      cx: currentWindow.position.x - window.screenLeft,
+      cy: currentWindow.position.y - window.screenTop,
+    },
   });
 
   otherWindows.forEach((w) => {
     gsap.to(`circle[data-id="${w.id}"]`, {
-      cx: w.position.x - window.screenLeft,
-      cy: w.position.y - window.screenTop,
+      attr: {
+        cx: w.position.x - window.screenLeft,
+        cy: w.position.y - window.screenTop,
+      },
     });
 
     gsap.to(`line[data-id="${w.id}"]`, {
@@ -94,7 +98,7 @@ function render() {
   requestAnimationFrame(render);
 }
 
-window.onload = async () => {
+window.onload = () => {
   const currentWindow = {
     id,
     color,
@@ -130,17 +134,17 @@ window.onload = async () => {
   otherWindows.forEach((w) => {
     const line = document.createElementNS(ns, "line");
     line.setAttribute("data-id", w.id);
-    line.setAttribute("x1", w.position.x);
-    line.setAttribute("y1", w.position.y);
-    line.setAttribute("x2", currentWindow.position.x);
-    line.setAttribute("y2", currentWindow.position.y);
+    line.setAttribute("x1", w.position.x - window.screenLeft);
+    line.setAttribute("y1", w.position.y - window.screenTop);
+    line.setAttribute("x2", currentWindow.position.x - window.screenLeft);
+    line.setAttribute("y2", currentWindow.position.y - window.screenTop);
     line.setAttribute("stroke", "var(--foreground)");
     lineGroup.appendChild(line);
 
     const circle = document.createElementNS(ns, "circle");
     circle.setAttribute("data-id", w.id);
-    circle.setAttribute("cx", w.position.x);
-    circle.setAttribute("cy", w.position.y);
+    circle.setAttribute("cx", w.position.x - window.screenLeft);
+    circle.setAttribute("cy", w.position.y - window.screenTop);
     circle.setAttribute("r", 50);
     circle.setAttribute("fill", w.color);
     circleGroup.appendChild(circle);
@@ -148,8 +152,8 @@ window.onload = async () => {
 
   const circle = document.createElementNS(ns, "circle");
   circle.setAttribute("data-id", currentWindow.id);
-  circle.setAttribute("cx", currentWindow.position.x);
-  circle.setAttribute("cy", currentWindow.position.y);
+  circle.setAttribute("cx", currentWindow.position.x - window.screenLeft);
+  circle.setAttribute("cy", currentWindow.position.y - window.screenTop);
   circle.setAttribute("r", 50);
   circle.setAttribute("fill", currentWindow.color);
   circleGroup.appendChild(circle);
