@@ -1,3 +1,15 @@
+:root {
+  --background: #f8f8f8;
+  --foreground: #444;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111;
+    --foreground: #aaa;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -8,4 +20,5 @@
 
 body {
   overflow: hidden;
+  background-color: var(--background);
 }
