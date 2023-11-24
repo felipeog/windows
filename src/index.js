@@ -74,12 +74,19 @@ function render() {
       },
     });
 
+    const distance = Math.hypot(
+      w.position.x - currentWindow.position.x,
+      w.position.y - currentWindow.position.y
+    );
+    const strokeWidth = Math.max(1, 10 - distance / 100);
+
     gsap.to(`line[data-id="${w.id}"]`, {
       attr: {
         x1: w.position.x - window.screenLeft,
         y1: w.position.y - window.screenTop,
         x2: currentWindow.position.x - window.screenLeft,
         y2: currentWindow.position.y - window.screenTop,
+        "stroke-width": strokeWidth,
       },
     });
   });
