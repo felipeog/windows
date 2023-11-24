@@ -11,6 +11,16 @@ const color =
   Math.random() * 255 +
   ")";
 
+function inertiaTo(current, target) {
+  const distance = target - current;
+
+  if (Math.abs(distance) < 0.01) {
+    return target;
+  }
+
+  return current + distance * 0.2;
+}
+
 addEventListener("storage", (event) => {
   const lineGroup = document.querySelector("#lineGroup");
   const circleGroup = document.querySelector("#circleGroup");
@@ -46,7 +56,16 @@ addEventListener("storage", (event) => {
 });
 
 function render() {
+  const target = {
+    x: window.screenLeft + window.innerWidth / 2,
+    y: window.screenTop + window.innerHeight / 2,
+  };
   const currentWindow = JSON.parse(localStorage.getItem(id));
+  const position = {
+    x: inertiaTo(currentWindow.position.x, target.x),
+    y: inertiaTo(currentWindow.position.y, target.y),
+  };
+
   const otherWindowsKeys = Object.keys(localStorage).filter(
     (key) => key !== currentWindow.id && key.startsWith("window:")
   );
@@ -61,8 +80,8 @@ function render() {
 
   gsap.to(`[data-id="${currentWindow.id}"]`, {
     attr: {
-      cx: currentWindow.position.x - window.screenLeft,
-      cy: currentWindow.position.y - window.screenTop,
+      cx: position.x - window.screenLeft,
+      cy: position.y - window.screenTop,
     },
   });
 
@@ -75,8 +94,8 @@ function render() {
     });
 
     const distance = Math.hypot(
-      w.position.x - currentWindow.position.x,
-      w.position.y - currentWindow.position.y
+      w.position.x - position.x,
+      w.position.y - position.y
     );
     const strokeWidth = Math.max(1, 10 - distance / 100);
 
@@ -84,8 +103,8 @@ function render() {
       attr: {
         x1: w.position.x - window.screenLeft,
         y1: w.position.y - window.screenTop,
-        x2: currentWindow.position.x - window.screenLeft,
-        y2: currentWindow.position.y - window.screenTop,
+        x2: position.x - window.screenLeft,
+        y2: position.y - window.screenTop,
         "stroke-width": strokeWidth,
       },
     });
@@ -95,10 +114,7 @@ function render() {
     id,
     JSON.stringify({
       ...currentWindow,
-      position: {
-        x: window.screenLeft + window.innerWidth / 2,
-        y: window.screenTop + window.innerHeight / 2,
-      },
+      position,
     })
   );
 
