@@ -12,14 +12,15 @@ const color =
   ")";
 
 addEventListener("storage", (event) => {
-  const svg = document.querySelector("svg");
+  const lineGroup = document.querySelector("#lineGroup");
+  const circleGroup = document.querySelector("#circleGroup");
 
   if (event.oldValue && !event.newValue) {
     const line = document.querySelector(`line[data-id="${event.key}"]`);
     const circle = document.querySelector(`circle[data-id="${event.key}"]`);
 
-    svg.removeChild(line);
-    svg.removeChild(circle);
+    lineGroup.removeChild(line);
+    circleGroup.removeChild(circle);
   }
 
   if (!event.oldValue && event.newValue) {
@@ -31,8 +32,8 @@ addEventListener("storage", (event) => {
     line.setAttribute("y1", w.position.y);
     line.setAttribute("x2", w.position.x);
     line.setAttribute("y2", w.position.y);
-    line.setAttribute("stroke", "black");
-    svg.appendChild(line);
+    line.setAttribute("stroke", "var(--foreground)");
+    lineGroup.appendChild(line);
 
     const circle = document.createElementNS(ns, "circle");
     circle.setAttribute("data-id", w.id);
@@ -40,7 +41,7 @@ addEventListener("storage", (event) => {
     circle.setAttribute("cy", w.position.y);
     circle.setAttribute("r", 50);
     circle.setAttribute("fill", w.color);
-    svg.appendChild(circle);
+    circleGroup.appendChild(circle);
   }
 });
 
@@ -118,6 +119,14 @@ window.onload = async () => {
   svg.setAttribute("height", window.innerHeight);
   document.body.appendChild(svg);
 
+  const lineGroup = document.createElementNS(ns, "g");
+  lineGroup.setAttribute("id", "lineGroup");
+  svg.appendChild(lineGroup);
+
+  const circleGroup = document.createElementNS(ns, "g");
+  circleGroup.setAttribute("id", "circleGroup");
+  svg.appendChild(circleGroup);
+
   otherWindows.forEach((w) => {
     const line = document.createElementNS(ns, "line");
     line.setAttribute("data-id", w.id);
@@ -125,8 +134,8 @@ window.onload = async () => {
     line.setAttribute("y1", w.position.y);
     line.setAttribute("x2", currentWindow.position.x);
     line.setAttribute("y2", currentWindow.position.y);
-    line.setAttribute("stroke", "black");
-    svg.appendChild(line);
+    line.setAttribute("stroke", "var(--foreground)");
+    lineGroup.appendChild(line);
 
     const circle = document.createElementNS(ns, "circle");
     circle.setAttribute("data-id", w.id);
@@ -134,7 +143,7 @@ window.onload = async () => {
     circle.setAttribute("cy", w.position.y);
     circle.setAttribute("r", 50);
     circle.setAttribute("fill", w.color);
-    svg.appendChild(circle);
+    circleGroup.appendChild(circle);
   });
 
   const circle = document.createElementNS(ns, "circle");
@@ -143,7 +152,7 @@ window.onload = async () => {
   circle.setAttribute("cy", currentWindow.position.y);
   circle.setAttribute("r", 50);
   circle.setAttribute("fill", currentWindow.color);
-  svg.appendChild(circle);
+  circleGroup.appendChild(circle);
 
   render();
 };
