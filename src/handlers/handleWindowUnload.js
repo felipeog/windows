@@ -1,5 +1,9 @@
+import { broadcastChannel } from "../objects/broadcastChannel";
 import { currentWindow } from "../objects/currentWindow";
 
 export function handleWindowUnload() {
-  localStorage.removeItem(currentWindow.id);
+  broadcastChannel.postMessage({
+    action: "delete",
+    payload: currentWindow,
+  });
 }
