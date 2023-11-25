@@ -1,14 +1,12 @@
+import { animate } from "../functions/animate";
+import { circle, circleGroup, lineGroup, svg } from "../objects/elements";
 import { createSvgElement } from "../functions/createSvgElement";
 import { currentWindow } from "../objects/currentWindow";
-import { render } from "../functions/render";
-import { svg, lineGroup, circleGroup, circle } from "../objects/elements";
-import { updateWindow } from "../functions/updateWindow";
 import { getStrokeWidth } from "../functions/getStrokeWidth";
 
 export function handleWindowLoad() {
   currentWindow.position.x = window.screenLeft + window.innerWidth / 2;
   currentWindow.position.y = window.screenTop + window.innerHeight / 2;
-
   localStorage.setItem(currentWindow.id, JSON.stringify(currentWindow));
 
   const otherWindows = Object.keys(localStorage)
@@ -53,6 +51,5 @@ export function handleWindowLoad() {
     circleGroup.appendChild(circle);
   });
 
-  updateWindow();
-  render();
+  animate();
 }

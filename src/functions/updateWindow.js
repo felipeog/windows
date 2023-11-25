@@ -15,8 +15,4 @@ export function updateWindow() {
     broadcastChannel.postMessage(currentWindow);
     localStorage.setItem(currentWindow.id, JSON.stringify(currentWindow));
   }
-
-  setTimeout(() => {
-    updateWindow();
-  }, 0);
 }

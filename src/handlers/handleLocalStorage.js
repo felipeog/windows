@@ -1,5 +1,5 @@
+import { circleGroup, lineGroup } from "../objects/elements";
 import { createSvgElement } from "../functions/createSvgElement";
-import { lineGroup, circleGroup } from "../objects/elements";
 import { state } from "../objects/state";
 
 export function handleLocalStorage(event) {

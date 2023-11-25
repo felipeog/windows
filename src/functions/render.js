@@ -1,8 +1,8 @@
+import { circle, svg } from "../objects/elements";
 import { currentWindow } from "../objects/currentWindow";
+import { getStrokeWidth } from "./getStrokeWidth";
 import { gsap } from "gsap";
 import { state } from "../objects/state";
-import { svg } from "../objects/elements";
-import { getStrokeWidth } from "./getStrokeWidth";
 
 export function render() {
   const otherWindows = Object.values(state);
@@ -11,7 +11,7 @@ export function render() {
   svg.setAttribute("width", window.innerWidth);
   svg.setAttribute("height", window.innerHeight);
 
-  gsap.to(`circle[data-id="${currentWindow.id}"]`, {
+  gsap.to(circle, {
     attr: {
       cx: currentWindow.position.x - window.screenLeft,
       cy: currentWindow.position.y - window.screenTop,
@@ -36,8 +36,4 @@ export function render() {
       },
     });
   });
-
-  setTimeout(() => {
-    render();
-  }, 0);
 }
