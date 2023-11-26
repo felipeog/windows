@@ -1,4 +1,4 @@
-import { circle, svg } from "../objects/elements";
+import { circle, lineGroup, svg } from "../objects/elements";
 import { currentWindow } from "../objects/currentWindow";
 import { getStrokeWidth } from "./getStrokeWidth";
 import { gsap } from "gsap";
@@ -25,14 +25,19 @@ export function render() {
         cy: w.position.y - window.screenTop,
       },
     });
+  });
 
-    gsap.to(`line[data-id="${w.id}"]`, {
+  lineGroup.querySelectorAll("line").forEach((line) => {
+    const from = state[line.dataset.from] ?? currentWindow;
+    const to = state[line.dataset.to] ?? currentWindow;
+
+    gsap.to(`[data-from="${from.id}"][data-to="${to.id}"]`, {
       attr: {
-        x1: w.position.x - window.screenLeft,
-        y1: w.position.y - window.screenTop,
-        x2: currentWindow.position.x - window.screenLeft,
-        y2: currentWindow.position.y - window.screenTop,
-        "stroke-width": getStrokeWidth(w, currentWindow),
+        x1: from.position.x - window.screenLeft,
+        y1: from.position.y - window.screenTop,
+        x2: to.position.x - window.screenLeft,
+        y2: to.position.y - window.screenTop,
+        "stroke-width": getStrokeWidth(from, to),
       },
     });
   });
