@@ -14,4 +14,4 @@ circle.setAttribute("data-id", currentWindow.id);
 circle.setAttribute("r", 50);
 circle.setAttribute("fill", currentWindow.color);
 
-export { svg, lineGroup, circleGroup, circle };
+export { circle, circleGroup, lineGroup, svg };
