@@ -11,7 +11,7 @@ export function handleBroadcastChannelMessage(event) {
 
   if (event.data.action === "update") {
     if (!state[event.data.payload.id]) {
-      createElementsFromUpdate(event.data.payload);
+      createElements(event.data.payload);
     } else {
       state[event.data.payload.id] = event.data.payload;
     }
@@ -40,6 +40,13 @@ function createElements(w) {
     for (let toIndex = fromIndex + 1; toIndex < allWindows.length; toIndex++) {
       const to = allWindows[toIndex];
 
+      const existingLine = lineGroup.querySelector(
+        `[data-from="${from.id}"][data-to="${to.id}"]`
+      );
+      if (existingLine) {
+        continue;
+      }
+
       const line = createSvgElement("line");
       line.setAttribute("data-from", from.id);
       line.setAttribute("data-to", to.id);
@@ -51,34 +58,6 @@ function createElements(w) {
       line.setAttribute("stroke-width", getStrokeWidth(from, to));
       lineGroup.appendChild(line);
     }
-  }
-}
-
-function createElementsFromUpdate(w) {
-  state[w.id] = w;
-
-  const circle = createSvgElement("circle");
-  circle.setAttribute("data-id", w.id);
-  circle.setAttribute("cx", w.position.x - window.screenLeft);
-  circle.setAttribute("cy", w.position.y - window.screenTop);
-  circle.setAttribute("r", 50);
-  circle.setAttribute("fill", w.color);
-  circleGroup.appendChild(circle);
-
-  const otherWindows = Object.values(state);
-  for (let toIndex = 0; toIndex < otherWindows.length; toIndex++) {
-    const to = otherWindows[toIndex];
-
-    const line = createSvgElement("line");
-    line.setAttribute("data-from", currentWindow.id);
-    line.setAttribute("data-to", to.id);
-    line.setAttribute("x1", currentWindow.position.x - window.screenLeft);
-    line.setAttribute("y1", currentWindow.position.y - window.screenTop);
-    line.setAttribute("x2", to.position.x - window.screenLeft);
-    line.setAttribute("y2", to.position.y - window.screenTop);
-    line.setAttribute("stroke", "var(--foreground)");
-    line.setAttribute("stroke-width", getStrokeWidth(currentWindow, to));
-    lineGroup.appendChild(line);
   }
 }
 
